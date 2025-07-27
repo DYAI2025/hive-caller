@@ -1,6 +1,4 @@
 # hive-caller
-direct voice to text to agent hive
-# hive-caller
 
 **Voice-Shortcut zu GPT-Systemen – minimal, schnell, auditiv.**
 
