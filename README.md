@@ -2,27 +2,36 @@
 
 **Voice-Shortcut zu GPT-Systemen – minimal, schnell, auditiv.**
 
-## Ziel
-Mit einem Tastendruck oder Klick sprichst du direkt ins Mikrofon, dein Text wird sofort an GPT geschickt und die Antwort als Sprachausgabe zurückgegeben. Kein Tippen, kein Lesen – nur sprechen und hören.
+Ein lokales Gateway, um via Hotkey oder Klick mit einem GPT-System zu sprechen
+und die Antwort als Sprache zu erhalten. Die Anwendung besteht aus einer
+Electron-Oberfläche und einem kleinen Python-Server.
 
 ## Komponenten
 
-- **electron-ui/**  
-  Minimalistisches Electron-Frontend (Button, Status, REST-Call an Python-Backend)
+- **electron-ui/** – Minimalistische Electron-App mit Start/Stopp-Button und
+  Statusanzeige. Kommuniziert per REST mit dem Python-Server und registriert
+  einen globalen Hotkey (standardmäßig `CommandOrControl+Shift+H`).
+- **main.py** – Flask-Server mit den Routen `/trigger` (startet das Recording)
+  und `/status` (liefert aktuellen Zustand). Lädt Einstellungen aus
+  `config.yaml`.
+- **whisper_listener.py** – Nimmt Audio vom Mikrofon auf und leitet den Text an
+  den Responder weiter.
+- **connector/responder.py** – Sendet Text an GPT (z. B. OpenAI) und gibt die
+  Antwort per Text‑to‑Speech wieder aus.
+- **config.yaml** – Beispielkonfiguration für API-Keys und Aufnahmedauer.
 
-- **main.py**  
-  Python-Server (Flask), steuert Status und Listener, REST-API `/trigger` und `/status`
+## Installation
 
-- **whisper_listener.py**  
-  Lauscht auf Audiodateien (SuperWhisper/Mikrofon), schickt Text an Responder
+```bash
+# Python-Abhängigkeiten
+pip install -r requirements.txt
 
-- **connector/responder.py**  
-  Übergibt Text an GPT (OpenAI/Claude), gibt Antwort als Audiodatei zurück (Text-to-Speech)
+# Electron-Abhängigkeiten
+cd electron-ui
+npm install
+```
 
-- **config.yaml**  
-  Lokale Einstellungen (API-Keys, Hotkey, Pfade)
-
-## Quickstart (Skizze)
+## Nutzung
 
 ```bash
 # Python-Server starten
@@ -30,4 +39,18 @@ python main.py
 
 # Electron-App starten
 cd electron-ui
-npm install && npm start
+npm start
+```
+
+Mit dem Hotkey (Standard: `CommandOrControl+Shift+H`) oder dem Button wird die
+Aufnahme gestartet. Nach wenigen Sekunden antwortet das GPT-Modell und gibt die
+Sprachausgabe wieder.
+
+## Docker
+
+Optional lässt sich der Python-Teil per Docker starten:
+
+```bash
+docker build -t hive-caller .
+docker run -p 8723:8723 hive-caller
+```
