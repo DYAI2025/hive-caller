@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AgentHub Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h2 { margin-top: 1em; }
+        pre { background: #f0f0f0; padding: 1em; }
+    </style>
+</head>
+<body>
+    <h1>AgentHub Dashboard</h1>
+    <h2>Agents</h2>
+    <pre>{{ data['agents'] | tojson(indent=2) }}</pre>
+    <h2>Tasks</h2>
+    <pre>{{ data['tasks'] | tojson(indent=2) }}</pre>
+    <h2>Wiki</h2>
+    <pre>{{ data['wiki'] | tojson(indent=2) }}</pre>
+</body>
+</html>
